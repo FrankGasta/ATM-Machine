@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <regex>
+
+class User {
+public:
+    std::string username;
+    std::string email;
+    std::string password;
+
+    User(std::string uname, std::string mail, std::string pass) 
+        : username(uname), email(mail), password(pass) {}
+};
+
+class RegistrationModule {
+private:
+    std::vector<User> users;
+
+    bool isValidEmail(const std::string& email) {
+        // Simple regex for email validation
+        const std::regex pattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+        return std::regex_match(email, pattern);
+    }
+
+public:
+    void registerUser() {
+        std::string username, email, password;
+
+        std::cout << "Enter username: ";
+        std::cin >> username;
+
+        std::cout << "Enter email: ";
+        std::cin >> email;
+
+        if (!isValidEmail(email)) {
+            std::cout << "Invalid email format. Please try again.\n";
+            return;
+        }
+
+        std::cout << "Enter password: ";
+        std::cin >> password;
+
+        // Store the new user
+        users.emplace_back(username, email, password);
+        std::cout << "User registered successfully!\n";
+    }
+
+    void showUsers() {
+        std::cout << "Registered Users:\n";
+        for (const auto& user : users) {
+            std::cout << "Username: " << user.username << ", Email: " << user.email << "\n";
+        }
+    }
+};
+
+int main() {
+    RegistrationModule regModule;
+    char choice;
+
+    do {
+        regModule.registerUser();
+        std::cout << "Do you want to register another user? (y/n): ";
+        std::cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+
+    regModule.showUsers();
+
+    return 0;
+}
