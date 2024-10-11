@@ -1,4 +1,4 @@
-<h1 style="text-align: center;"> ATM MACHINE </h1>
+<h1 align = "center">ATM MACHINE</h1>
 
 <h2>Developers:</h2>
 
@@ -9,4 +9,4 @@
   <li><b>Marlon Peralta</b></li>
 </ul>
 
-
+<p>Welcome to the ATM Machine project, a simulation of a real-world ATM system.<b>This project aims to provide a user-friendly interface for performing basic banking transactions.</b></p>
