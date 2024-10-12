@@ -1,0 +1,164 @@
+#include <iostream>
+#include <fstream>
+#define MAX 100
+using namespace std;
+
+// This holds the account details in a struct
+struct Account {
+    int accNumber;
+    string accName;
+    string birthDay;
+    string contactNumber;
+    double balance;
+    string pinCode;
+};
+
+// ATM class to manage accounts and transactions
+class MyATM {
+private:
+    Account accounts[MAX]; // Array to store multiple accounts
+    int accountCount;
+
+public:
+    MyATM() : accountCount(0) {} // Constructor to initialize accountCount
+
+    void registerAccount();
+    void deposit();
+    void withdraw();
+    void balanceInquiry();
+};
+
+// Function to register a new account
+void MyATM::registerAccount() {
+    if (accountCount >= MAX) {
+        cout << "Account Registration is Full.\n";
+        return;
+    }
+
+    Account newAccount;
+    cout << "Enter account name: ";
+    cin.ignore(); // Ensure input buffer is clear
+    getline(cin, newAccount.accName);
+    cout << "Enter birthday (YYYY-MM-DD): ";
+    getline(cin, newAccount.birthDay);
+    cout << "Enter contact number: ";
+    getline(cin, newAccount.contactNumber);
+    cout << "Enter initial deposit (min 5000): ";
+    cin >> newAccount.balance;
+
+    if (newAccount.balance < 5000) {
+        cout << "Initial deposit must be at least 5000.\n";
+        return;
+    }
+
+    cout << "Set a 4-digit PIN: ";
+    cin.ignore(); // Clear buffer before getting PIN
+    getline(cin, newAccount.pinCode);
+
+    newAccount.accNumber = accountCount + 1; // Assign account number
+    accounts[accountCount++] = newAccount;   // Add account to array
+
+    cout << "Account registered successfully with Account Number: " << newAccount.accNumber << endl;
+
+}
+
+void MyATM::deposit() {
+    int accNumber;
+    cout << "Enter account number for deposit: ";
+    cin >> accNumber;
+
+    if (accNumber <= 0 || accNumber > accountCount) {
+        cout << "Invalid account number.\n";
+        return;
+    }
+
+    double amount;
+    cout << "Enter amount to deposit: ";
+    cin >> amount;
+
+    if (amount <= 0) {
+        cout << "Deposit amount must be positive.\n";
+        return;
+    }
+
+    accounts[accNumber - 1].balance += amount; // Update balance
+    cout << "Deposit successful! New balance: " << accounts[accNumber - 1].balance << endl;
+}
+
+void MyATM::withdraw() {
+    int accNumber;
+    cout << "Enter account number for withdrawal: ";
+    cin >> accNumber;
+
+    if (accNumber <= 0 || accNumber > accountCount) {
+        cout << "Invalid account number.\n";
+        return;
+    }
+
+    double amount;
+    cout << "Enter amount to withdraw: ";
+    cin >> amount;
+
+    if (amount <= 0) {
+        cout << "Withdrawal amount must be positive.\n";
+        return;
+    }
+
+    if (amount > accounts[accNumber - 1].balance) {
+        cout << "Insufficient balance!\n";
+    } else {
+        accounts[accNumber - 1].balance -= amount;
+        cout << "Withdrawal successful! New balance: " << accounts[accNumber - 1].balance << endl;
+    }
+}
+
+void MyATM::balanceInquiry() {
+    int accNumber;
+    cout << "Enter account number for balance inquiry: ";
+    cin >> accNumber;
+
+    if (accNumber <= 0 || accNumber > accountCount) {
+        cout << "Invalid account number.\n";
+        return;
+    }
+
+    cout << "Your current balance is: " << accounts[accNumber - 1].balance << endl;
+}
+
+int main() {
+    MyATM atm; // Create an instance of MyATM
+    int choice;
+
+    do {
+        cout << "\nATM Machine Menu\n";
+        cout << "1. Register Account\n";
+        cout << "2. Deposit\n";
+        cout << "3. Withdraw\n";
+        cout << "4. Balance Inquiry\n";
+        cout << "5. Exit\n";
+        cout << "Choose an option: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            atm.registerAccount();
+            break;
+        case 2:
+            atm.deposit();
+            break;
+        case 3:
+            atm.withdraw();
+            break;
+        case 4:
+            atm.balanceInquiry();
+            break;
+        case 5:
+            cout << "Exiting program.\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
