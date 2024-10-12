@@ -46,11 +46,3 @@
   <li>Performing transactions: [transaction instructions]</li>
   <li>Viewing account information: [account information instructions]</li>
 </ul>
-
-<h2 id="contributing">Contributing</h2>
-
-<p>We welcome contributions to the ATM Machine project. If you'd like to report an issue or submit a pull request, please [contact information]. We're also happy to receive feedback and suggestions on how to improve the project.</p>
-
-<h2 id="license">License</h2>
-
-<p>The ATM Machine project is released under the [license] license.</p>
