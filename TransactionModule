@@ -2,8 +2,8 @@
 #include <fstream>
 #include <conio.h>
 #include <windows.h>
-#include <thread>
-#include <chrono>
+
+using namespace std; // Added namespace
 
 class Transaction {
 private:
@@ -21,65 +21,50 @@ public:
 
 void Transaction::transaction_menu()
 {
-    Transaction trans; 
+    Transaction trans;
 
-    std::string transactionMenu[4] = {"Balance Inquiry", "Withdraw", "Deposit", "Exit"};
+    string transactionMenu[4] = {"Balance Inquiry", "Withdraw", "Deposit", "Exit"};
     int pointer = 0;
     const char ENTER = 13;
-    char ch = ' ';
 
-    while(true) {
+    while (true) {
         system("cls");
-        std::cout << "TRANSACTION MENU" << std::endl << std::endl;
+        cout << "TRANSACTION MENU" << endl << endl;
 
-        for(int i=0; i<4; ++i) {
-            if(i==pointer){
-                std::cout << transactionMenu[i] << std::endl;
+        for (int i = 0; i < 4; ++i) {
+            if (i == pointer) {
+                cout << "> " << transactionMenu[i] << endl; // Highlight the selected option
             } else {
-                std::cout << transactionMenu[i] << std::endl;
+                cout << "  " << transactionMenu[i] << endl;
             }
         }
 
-        while(true) {
-            if(GetAsyncKeyState(VK_UP) != 0) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                --pointer;
-                if(pointer == -1){
-                    pointer = 3;
-                }
-                break;
+        // Wait for user input to navigate the menu
+        char ch = _getch(); // Get a character without waiting for Enter key
+
+        if (ch == VK_UP) {
+            pointer--;
+            if (pointer < 0) {
+                pointer = 3; // Loop back to last option
             }
-            else if(GetAsyncKeyState(VK_DOWN) != 0) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                ++pointer;
-                if(pointer == 4){
-                    pointer = 0;
-                }
-                break;
+        } else if (ch == VK_DOWN) {
+            pointer++;
+            if (pointer > 3) {
+                pointer = 0; // Loop back to first option
             }
-            else if(ch=getch() == ENTER) {
-                switch(pointer) {
-                    case 0:
-                    {
-                        trans.displayBalance();
-                        break;
-                    }
-                    case 1:
-                    {
-                        trans.transaction_withdraw();
-                        break;
-                    }
-                    case 2:
-                    {
-                        trans.transaction_deposit();
-                        break;
-                    }
-                    case 3:
-                    {
-                        exit(0);
-                    }
-                }
-                break;
+        } else if (ch == ENTER) {
+            switch (pointer) {
+                case 0:
+                    trans.displayBalance();
+                    break;
+                case 1:
+                    trans.transaction_withdraw();
+                    break;
+                case 2:
+                    trans.transaction_deposit();
+                    break;
+                case 3:
+                    exit(0);
             }
         }
     }
@@ -88,84 +73,84 @@ void Transaction::transaction_menu()
 void Transaction::displayBalance()
 {
     int balance;
-    std::ifstream infile("account.txt");
+    ifstream infile("account.txt");
     if (infile.is_open()) {
         infile >> balance;
         infile.close();
     } else {
-        std::cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
     }
 
-    std::cout << "========= Balance =========" << std::endl;
-    std::cout << "Amount: Php. " << balance << ".00" << std::endl;
-    std::cout << "Press any key to continue..." << std::endl;
-    getch();
+    cout << "========= Balance =========" << endl;
+    cout << "Amount: Php. " << balance << ".00" << endl;
+    cout << "Press any key to continue..." << endl;
+    _getch();
 }
 
 void Transaction::transaction_withdraw()
 { 
     int balance;
-    std::ifstream infile("account.txt");
+    ifstream infile("account.txt");
     if (infile.is_open()) {
         infile >> balance;
         infile.close();
     } else {
-        std::cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
     }
 
     int inputAmount;
 
-    std::cout << "======== Withdraw ========" << std::endl;
-    std::cout << "Input Amount: Php. ";
-    std::cin >> inputAmount;
+    cout << "======== Withdraw ========" << endl;
+    cout << "Input Amount: Php. ";
+    cin >> inputAmount;
 
     if (inputAmount > balance) {
-        std::cout << "Insufficient balance." << std::endl;
+        cout << "Insufficient balance." << endl;
     } else {
         balance -= inputAmount;
-        std::ofstream outfile("account.txt");
+        ofstream outfile("account.txt");
         if (outfile.is_open()) {
             outfile << balance;
             outfile.close();
         } else {
-            std::cout << "Unable to open file";
+            cout << "Unable to open file" << endl;
         }
-        std::cout << "Withdrawal successful. New balance: Php. " << balance << ".00" << std::endl;
+        cout << "Withdrawal successful. New balance: Php. " << balance << ".00" << endl;
     }
 
-    std::cout << "Press any key to continue..." << std::endl;
-    getch();
+    cout << "Press any key to continue..." << endl;
+    _getch();
 }
 
 void Transaction::transaction_deposit()
 {
     int balance;
-    std::ifstream infile("account.txt");
+    ifstream infile("account.txt");
     if (infile.is_open()) {
         infile >> balance;
         infile.close();
     } else {
-        std::cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
     }
 
     int inputAmount;
 
-    std::cout << "=========== Deposit ============" << std::endl;
-    std::cout << "Input Amount: Php. ";
-    std::cin >> inputAmount;
+    cout << "=========== Deposit ============" << endl;
+    cout << "Input Amount: Php. ";
+    cin >> inputAmount;
 
     balance += inputAmount;
-    std::ofstream outfile("account.txt");
+    ofstream outfile("account.txt");
     if (outfile.is_open()) {
         outfile << balance;
         outfile.close();
     } else {
-        std::cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
     }
-    std::cout << "Deposit successful. New balance: Php. " << balance << ".00" << std::endl;
+    cout << "Deposit successful. New balance: Php. " << balance << ".00" << endl;
 
-    std::cout << "Press any key to continue..." << std::endl;
-    getch();
+    cout << "Press any key to continue..." << endl;
+    _getch();
 }
 
 int main() {
