@@ -1,0 +1,44 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+// TODO: Implement the function to save the account details to a file on the flash drive.
+// This function should take the newAccount object as an argument and write its details
+// (account number, name, birthday, contact number, balance, and PIN) to a specified file
+// on the flash drive (e.g., "F:/accounts.txt").
+
+   void MyATM::saveToFile(const Account& newAccount) {
+    ofstream myfile("F:/xyz.txt", ios::app); // Change "F:/" to your actual flash drive letter
+    if (myfile.is_open()) {
+        myfile << newAccount.accNumber << ","
+                << newAccount.accName << ","
+                << newAccount.birthDay << ","
+                << newAccount.contactNumber << ","
+                << newAccount.balance << ","
+                << newAccount.pinCode << endl;
+        myfile.close();
+        cout << "Account details written to file successfully." << endl;
+    } else {
+        cout << "Error opening file for writing!" << endl;
+    }
+}
+
+// Function to read and display account details from the file
+void MyATM::readFromFile() {
+    char arr[256];
+    cout << "Reading File Started..." << endl;
+    ifstream obj("F:/xyz.txt"); // Change "F:/" to your actual flash drive letter
+    if (obj.is_open()) {
+        while (obj.getline(arr, 256)) {
+            cout << "Account Content: " << arr << endl;
+        }
+        obj.close();
+        cout << "File reading completed." << endl;
+    } else {
+        cout << "Error opening file for reading!" << endl;
+    }
+}
+
+    return 0;
+}
