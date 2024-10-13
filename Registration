@@ -1,70 +1,91 @@
 #include <iostream>
+#include <fstream>
+#include <conio.h>
+#include <windows.h>
 #include <string>
-#include <vector>
-#include <regex>
+#include <ctime>
+#include <cstdlib>
 
-class User {
-public:
-    std::string username;
-    std::string email;
-    std::string password;
+using namespace std;
 
-    User(std::string uname, std::string mail, std::string pass) 
-        : username(uname), email(mail), password(pass) {}
-};
-
-class RegistrationModule {
+class Registration {
 private:
-    std::vector<User> users;
-
-    bool isValidEmail(const std::string& email) {
-        // Simple regex for email validation
-        const std::regex pattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-        return std::regex_match(email, pattern);
-    }
+    string RegisterAccNumber();
+    void EncryptPIN(string &pin);
+    bool FileExists(const string &filename);
 
 public:
-    void registerUser() {
-        std::string username, email, password;
-
-        std::cout << "Enter username: ";
-        std::cin >> username;
-
-        std::cout << "Enter email: ";
-        std::cin >> email;
-
-        if (!isValidEmail(email)) {
-            std::cout << "Invalid email format. Please try again.\n";
-            return;
-        }
-
-        std::cout << "Enter password: ";
-        std::cin >> password;
-
-        // Store the new user
-        users.emplace_back(username, email, password);
-        std::cout << "User registered successfully!\n";
-    }
-
-    void showUsers() {
-        std::cout << "Registered Users:\n";
-        for (const auto& user : users) {
-            std::cout << "Username: " << user.username << ", Email: " << user.email << "\n";
-        }
-    }
+    void Register();
 };
 
-int main() {
-    RegistrationModule regModule;
-    char choice;
+string Registration::RegisterAccNumber() {
+    srand(time(0));
+    string accNumber;
+    ifstream infile;
 
     do {
-        regModule.registerUser();
-        std::cout << "Do you want to register another user? (y/n): ";
-        std::cin >> choice;
-    } while (choice == 'y' || choice == 'Y');
+        accNumber = to_string(rand() % 9000000000 + 1000000000); 
+    } while (FileExists("account_" + accNumber + ".txt")); 
 
-    regModule.showUsers();
+    return accNumber;
+}
 
+void Registration::EncryptPIN(string &pin) {
+    for (char &c : pin) c += 3; 
+}
+
+bool Registration::FileExists(const string &filename) {
+    ifstream file(filename);
+    return file.good(); 
+}
+
+void Registration::Register() {
+    string name, bday, contact, pin;
+    const int deposit = 5000;
+
+    system("cls");
+
+    string accNumber = RegisterAccNumber();
+    cout << "Generated Account Number: " << accNumber << endl;
+
+    cout << "Enter Account Name: ";
+    cin.ignore();
+    getline(cin, name);
+
+    cout << "Enter Birthday (YYYY-MM-DD): ";
+    cin >> bday;
+
+    cout << "Enter Contact Number: ";
+    cin >> contact;
+
+    cout << "Enter a 4-digit PIN Code: ";
+    pin = "";
+    while (pin.length() < 4) {
+        char ch = _getch();
+        if (isdigit(ch)) {
+            pin += ch;
+            cout << '*';
+        }
+    }
+    cout << endl;
+
+    EncryptPIN(pin);
+
+    ofstream outfile("account_" + accNumber + ".txt");
+    outfile << "Account Number: " << accNumber << endl
+            << "Account Name: " << name << endl
+            << "Birthday: " << bday << endl
+            << "Contact Number: " << contact << endl
+            << "Initial Deposit: " << deposit << endl
+            << "Encrypted PIN: " << pin << endl;
+
+    cout << "Account successfully registered!" << endl;
+    cout << "Press any key to return to the menu..." << endl;
+    _getch();
+}
+
+int main() {
+    Registration reg;
+    reg.Register();
     return 0;
 }
