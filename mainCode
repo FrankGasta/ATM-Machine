@@ -1,1 +1,247 @@
 #include <iostream>
+#include <fstream>
+#include <conio.h>
+#include <windows.h>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+// Registration Class
+class Registration {
+private:
+    string RegisterAccNumber();
+    void EncryptPIN(string &pin);
+    bool FileExists(const string &filename);
+
+public:
+    void Register();
+};
+
+// Transaction Class
+class Transaction {
+private:
+    string accNumber;
+    int balance;
+
+    int withdraw_checker(int amount, int balance);
+    int withdraw_calc(int balance, int withdraw);
+    int deposit_checker(int amount);
+    int deposit_calc(int balance, int deposit);
+    void loadAccount(const string &accNumber);
+    void updateAccount(const string &accNumber);
+
+public:
+    void setAccountNumber(const string &accNo);
+    void transaction_menu();
+    void displayBalance();
+    void transaction_withdraw();
+    void transaction_deposit();
+};
+
+// Registration Functions
+string Registration::RegisterAccNumber() {
+    srand(time(0));
+    string accNumber;
+    do {
+        accNumber = to_string(rand() % 9000000000 + 1000000000); 
+    } while (FileExists("account_" + accNumber + ".txt"));
+    return accNumber;
+}
+
+void Registration::EncryptPIN(string &pin) {
+    for (char &c : pin) c += 3; // Simple encryption by shifting characters
+}
+
+bool Registration::FileExists(const string &filename) {
+    ifstream file(filename);
+    return file.good();  
+}
+
+void Registration::Register() {
+    string name, bday, contact, pin;
+    const int deposit = 5000;
+
+    system("cls");
+    string accNumber = RegisterAccNumber();
+    cout << "Generated Account Number: " << accNumber << endl;
+
+    cout << "Enter Account Name: ";
+    cin.ignore();
+    getline(cin, name);
+
+    cout << "Enter Birthday (YYYY-MM-DD): ";
+    cin >> bday;
+
+    cout << "Enter Contact Number: ";
+    cin >> contact;
+
+    cout << "Enter a 4-digit PIN Code: ";
+    pin = "";
+    while (pin.length() < 4) {
+        char ch = _getch();
+        if (isdigit(ch)) {
+            pin += ch;
+            cout << '*';
+        }
+    }
+    cout << endl;
+
+    EncryptPIN(pin);
+
+    ofstream outfile("account_" + accNumber + ".txt");
+    outfile << accNumber << endl
+            << name << endl
+            << bday << endl
+            << contact << endl
+            << deposit << endl
+            << pin << endl;
+    outfile.close();
+
+    cout << "Account successfully registered!" << endl;
+    cout << "Press any key to return to the menu..." << endl;
+    _getch();
+}
+
+// Transaction Functions
+void Transaction::setAccountNumber(const string &accNo) {
+    accNumber = accNo;
+}
+
+void Transaction::loadAccount(const string &accNumber) {
+    ifstream infile("account_" + accNumber + ".txt");
+    if (infile.is_open()) {
+        string accName, bday, contact, pin;
+        infile >> accNumber >> accName >> bday >> contact >> balance >> pin;
+        infile.close();
+    } else {
+        cout << "Account not found!" << endl;
+        exit(0);
+    }
+}
+
+void Transaction::updateAccount(const string &accNumber) {
+    ofstream outfile("account_" + accNumber + ".txt");
+    if (outfile.is_open()) {
+        outfile << accNumber << endl
+                << "Placeholder Name" << endl // Keep the existing account details here
+                << "Placeholder Bday" << endl
+                << "Placeholder Contact" << endl
+                << balance << endl
+                << "Placeholder Encrypted PIN" << endl;
+        outfile.close();
+    }
+}
+
+void Transaction::transaction_menu() {
+    Transaction trans;
+    string transactionMenu[4] = {"Balance Inquiry", "Withdraw", "Deposit", "Exit"};
+    int pointer = 0;
+    const char ENTER = 13;
+
+    while (true) {
+        system("cls");
+        cout << "TRANSACTION MENU" << endl << endl;
+
+        for (int i = 0; i < 4; ++i) {
+            if (i == pointer) {
+                cout << "> " << transactionMenu[i] << endl; 
+            } else {
+                cout << "  " << transactionMenu[i] << endl;
+            }
+        }
+
+        char ch = _getch();
+
+        if (ch == VK_UP) {
+            pointer--;
+            if (pointer < 0) {
+                pointer = 3; 
+            }
+        } else if (ch == VK_DOWN) {
+            pointer++;
+            if (pointer > 3) {
+                pointer = 0; 
+            }
+        } else if (ch == ENTER) {
+            switch (pointer) {
+                case 0:
+                    trans.displayBalance();
+                    break;
+                case 1:
+                    trans.transaction_withdraw();
+                    break;
+                case 2:
+                    trans.transaction_deposit();
+                    break;
+                case 3:
+                    exit(0);
+            }
+        }
+    }
+}
+
+void Transaction::displayBalance() {
+    cout << "========= Balance =========" << endl;
+    cout << "Amount: Php. " << balance << ".00" << endl;
+    cout << "Press any key to continue..." << endl;
+    _getch();
+}
+
+void Transaction::transaction_withdraw() {
+    int inputAmount;
+
+    cout << "======== Withdraw ========" << endl;
+    cout << "Input Amount: Php. ";
+    cin >> inputAmount;
+
+    if (inputAmount > balance) {
+        cout << "Insufficient balance." << endl;
+    } else {
+        balance -= inputAmount;
+        updateAccount(accNumber);
+        cout << "Withdrawal successful. New balance: Php. " << balance << ".00" << endl;
+    }
+
+    cout << "Press any key to continue..." << endl;
+    _getch();
+}
+
+void Transaction::transaction_deposit() {
+    int inputAmount;
+
+    cout << "=========== Deposit ============" << endl;
+    cout << "Input Amount: Php. ";
+    cin >> inputAmount;
+
+    balance += inputAmount;
+    updateAccount(accNumber);
+
+    cout << "Deposit successful. New balance: Php. " << balance << ".00" << endl;
+
+    cout << "Press any key to continue..." << endl;
+    _getch();
+}
+
+int main() {
+    Registration reg;
+    Transaction trans;
+
+    int option;
+    cout << "1. Register Account\n2. Transaction Menu\nSelect Option: ";
+    cin >> option;
+
+    if (option == 1) {
+        reg.Register();
+    } else if (option == 2) {
+        string accNumber;
+        cout << "Enter Account Number: ";
+        cin >> accNumber;
+        trans.setAccountNumber(accNumber);
+        trans.loadAccount(accNumber);
+        trans.transaction_menu();
+    }
+
+    return 0;
+}
