@@ -6,6 +6,7 @@
 #include <ctime>   // For time()
 #include <conio.h> // For _getch()
 #include <iomanip> // For std::setw and std::setfill
+#include <limits>  // For numeric_limits
 
 using namespace std;
 
@@ -62,6 +63,38 @@ public:
     void Register(MyATM &atm);
 };
 
+// New birthday input function
+void getBirthdayInput(string &birthday) {
+    char ch;
+    birthday = "____-__-__"; // Initial format
+    int pos = 0; // Position in the birthday string
+
+    cout << "Enter Birthday (YYYY-MM-DD): " << birthday;
+
+    while (pos < birthday.length()) {
+        ch = _getch(); // Get a character without echoing it
+
+        if (isdigit(ch)) { // Check if the character is a digit
+            if (pos == 4 || pos == 7) {
+                pos++; // Skip the '-' at positions 4 and 7
+            }
+            birthday[pos] = ch; // Replace the '_' with the digit
+            pos++;
+        } else if (ch == 8 && pos > 0) { // Handle backspace
+            if (pos == 5 || pos == 8) {
+                pos--; // Skip over the '-' if necessary
+            }
+            pos--; // Move back one position
+            birthday[pos] = '_'; // Replace the digit with '_'
+        }
+
+        // Display the updated birthday string
+        cout << "\rEnter Birthday (YYYY-MM-DD): " << birthday;
+    }
+
+    cout << endl; // Move to the next line after entering the birthday
+}
+
 void Registration::Register(MyATM &atm) {
     Account account;
     cout << "========== REGISTER ==========" << endl;
@@ -74,14 +107,13 @@ void Registration::Register(MyATM &atm) {
     cout << "Enter Account Name: ";
     cin >> account.accName;
 
-    cout << "Enter Birthday (YYYY-MM-DD): ";
-    cin >> account.birthDay;
+    // Use the new function for birthday input
+    getBirthdayInput(account.birthDay);
 
     cout << "Enter Contact Number: ";
     cin >> account.contactNumber;
 
     cout << "Enter a 4-digit PIN Code: ";
-
     string pin;
     char ch; // Variable to store each character entered
     while (pin.length() < 4) {
@@ -243,69 +275,76 @@ void Transaction::changePin() {
 }
 
 void Transaction::transaction_menu(MyATM &atm) {
-    string inputAccNumber;
-    cout << "Enter your account number: ";
-    cin >> inputAccNumber;
-
-    if (!validateAccount(inputAccNumber)) {
-        cout << "Account not found!" << endl;
-        cout << "Press any key to continue..." << endl;
-        _getch();
-        return;
-    }
-
-    loadAccount(inputAccNumber);
-
     int choice;
     do {
         system("cls");
         cout << "========== TRANSACTION MENU ==========" << endl;
-        cout << "1. Balance Inquiry" << endl;
+        cout << "1. View Balance" << endl;
         cout << "2. Withdraw" << endl;
         cout << "3. Deposit" << endl;
         cout << "4. Fund Transfer" << endl;
-        cout << "5. Change PIN Code" << endl;
-        cout << "6. Exit to Main Menu" << endl;
-        cout << "Select an option (1-6): ";
+        cout << "5. Change PIN" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-            case 1: displayBalance(); break;
-            case 2: transaction_withdraw(); break;
-            case 3: transaction_deposit(); break;
-            case 4: transaction_fundTransfer(atm); break;
-            case 5: changePin(); break;
-            case 6: cout << "Exiting to Main Menu." << endl; break;
-            default: cout << "Invalid option, please try again." << endl; break;
+        case 1:
+            displayBalance();
+            break;
+        case 2:
+            transaction_withdraw();
+            break;
+        case 3:
+            transaction_deposit();
+            break;
+        case 4:
+            transaction_fundTransfer(atm);
+            break;
+        case 5:
+            changePin();
+            break;
         }
-    } while (choice != 6);
+    } while (choice != 0);
 }
 
 int main() {
-    srand(static_cast<unsigned int>(time(0))); // Seed random number generator
-
+    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
     MyATM atm;
-    Registration registration;
-    Transaction transaction;
+    Registration reg;
+    Transaction trans;
 
-    int mainChoice;
-
+    int choice;
     do {
         system("cls");
-        cout << "========== ATM SYSTEM ==========" << endl;
+        cout << "========== ATM SIMULATION ==========" << endl;
         cout << "1. Register" << endl;
-        cout << "2. Login" << endl;
-        cout << "3. Exit" << endl;
-        cout << "Select an option (1-3): ";
-        cin >> mainChoice;
+        cout << "2. Transaction" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-        switch (mainChoice) {
-            case 1: registration.Register(atm); break;
-            case 2: transaction.transaction_menu(atm); break;
-            case 3: cout << "Exiting the system." << endl; break;
-            default: cout << "Invalid option, please try again." << endl; break;
+        switch (choice) {
+        case 1:
+            reg.Register(atm);
+            break;
+        case 2: {
+            string inputAccNumber;
+            cout << "Enter account number: ";
+            cin >> inputAccNumber;
+
+            if (trans.validateAccount(inputAccNumber)) {
+                trans.loadAccount(inputAccNumber);
+                trans.transaction_menu(atm);
+            } else {
+                cout << "Account not found!" << endl;
+                cout << "Press any key to continue..." << endl;
+                _getch();
+            }
+            break;
         }
-    } while (mainChoice != 3);
+        }
+    } while (choice != 0);
 
     return 0;
 }
