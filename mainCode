@@ -318,6 +318,7 @@ void Transaction::transaction_menu(MyATM &atm) {
 }
 
 int main() {
+    system("color 0A");
     srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
     MyATM atm;
     Registration reg;
