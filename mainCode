@@ -69,7 +69,7 @@ void getBirthdayInput(string &birthday) {
     birthday = "____-__-__"; // Initial format
     int pos = 0; // Position in the birthday string
 
-    cout << "Enter Birthday (YYYY-MM-DD): " << birthday;
+    cout << "\nEnter Birthday (YYYY-MM-DD): " << birthday;
 
     while (pos < birthday.length()) {
         ch = _getch(); // Get a character without echoing it
@@ -89,7 +89,7 @@ void getBirthdayInput(string &birthday) {
         }
 
         // Display the updated birthday string
-        cout << "\rEnter Birthday (YYYY-MM-DD): " << birthday;
+        cout << "\r\rEnter Birthday (YYYY-MM-DD): " << birthday;
     }
 
     cout << endl; // Move to the next line after entering the birthday
@@ -97,32 +97,30 @@ void getBirthdayInput(string &birthday) {
 
 void Registration::Register(MyATM &atm) {
     Account account;
-      cout << "\t\t                          _______   ________   ______   ______   ______   ________  ________  _______" << endl;
-    cout << "\t\t                        |       \\ |        \\ /      \\ |      \\ /      \\ |        \\|        \\|       \\ " << endl;
-    cout << "\t\t ____  ____  ____       | $$$$$$$\\| $$$$$$$$|  $$$$$$\\ \\$$$$$$|  $$$$$$\\ \\$$$$$$$$| $$$$$$$$| $$$$$$$\\             ____  ____  ____ " << endl;
-    cout << "\t\t|    \\|    \\|    \\      | $$__| $$| $$__    | $$ __\\$$  | $$  | $$___\\$$   | $$   | $$__    | $$__| $$            |    \\|    \\|    \\" << endl;
-    cout << "\t\t \\$$$$ \\$$$$ \\$$$$      | $$    $$| $$  \\   | $$|    \\  | $$   \\$$    \\    | $$   | $$  \\   | $$    $$             \\$$$$ \\$$$$ \\$$$$" << endl;
-    cout << "\t\t|    \\|    \\|    \\      | $$$$$$$\\| $$$$$   | $$ \\$$$$  | $$   _\\$$$$$$\\   | $$   | $$$$$   | $$$$$$$\\            |    \\|    \\|    \\" << endl;
-    cout << "\t\t \\$$$$ \\$$$$ \\$$$$      | $$  | $$| $$_____ | $$__| $$ _| $$_ |  \\__| $$   | $$   | $$_____ | $$  | $$             \\$$$$ \\$$$$ \\$$$$" << endl;
-    cout << "\t\t                        | $$  | $$| $$     \\ \\$$    $$|   $$ \\ \\$$    $$   | $$   | $$     \\| $$  | $$ " << endl;
-    cout << "\t\t                         \\$$   \\$$ \\$$$$$$$$  \\$$$$$$  \\$$$$$$  \\$$$$$$     \\$$    \\$$$$$$$$ \\$$   \\$$ \n\n\n" << endl;
-
+      cout << "\t\t\t __________              .__          __                " << endl;
+    cout << "\t\t\t\\______   \\ ____   ____ |__| _______/  |_  ___________ " << endl;
+    cout << "\t\t\t |       _// __ \\ / ___\\|  |/  ___/\\   __\\/ __ \\_  __ \\" << endl;
+    cout << "\t\t\t |    |   \\  ___// /_/  >  |\\___ \\  |  | \\  ___/|  | \\/" << endl;
+    cout << "\t\t\t |____|_  /\\___  >___  /|__/____  > |__|  \\___  >__|   " << endl;
+    cout << "\t\t\t        \\/     \\/_____/         \\/            \\/       \n" << endl;
 
     // Generate a 5-digit account number
     account.accNumber = to_string(rand() % 100000); // Random number between 0 and 99999
     account.accNumber.insert(0, 5 - account.accNumber.length(), '0'); // Ensure it's 5 digits
-    cout << "Generated Account Number: " << account.accNumber << endl;
+    cout << "\t\t\t\t*--------------------------------*" << endl;
+    cout << "\t\t\t\tGenerated Account Number: " << account.accNumber << endl;
+    cout << "\t\t\t\t*--------------------------------*" << endl;
 
-    cout << "Enter Account Name: ";
+    cout << "\nEnter Account Name: ";
     cin >> account.accName;
 
     // Use the new function for birthday input
     getBirthdayInput(account.birthDay);
 
-    cout << "Enter Contact Number: ";
+    cout << "\nEnter Contact Number: ";
     cin >> account.contactNumber;
 
-    cout << "Enter a 4-digit PIN Code: ";
+    cout << "\nEnter a 4-digit PIN Code: ";
     string pin;
     char ch; // Variable to store each character entered
     while (pin.length() < 4) {
@@ -151,11 +149,17 @@ void Registration::Register(MyATM &atm) {
                 << account.balance << ","
                 << account.pinCode << "\n";
         outfile.close();
-        cout << "Account successfully registered!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tAccount successfully registered!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
-        cout << "Error opening file for writing!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tError opening file for writing!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     }
-    cout << "Press any key to continue..." << endl;
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tPress any key to continue..." << endl;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     _getch();
 }
 
@@ -194,26 +198,37 @@ void Transaction::loadAccount(const string &inputAccNumber) {
         }
         infile.close();
     } else {
-        cout << "Unable to open file" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tUnable to open file" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     }
 }
 
 void Transaction::displayBalance() {
-    cout << "Account Balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tAccount Balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
+
     cout << "Press any key to continue..." << endl;
     _getch();
 }
 
 void Transaction::transaction_withdraw() {
     double amount;
-    cout << "Enter amount to withdraw: ";
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tEnter amount to withdraw: ";
     cin >> amount;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
 
     if (amount > account.balance) {
-        cout << "Insufficient balance!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tInsufficient balance!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
         account.balance -= amount;
-        cout << "Withdrawal successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+        cout << "\t\t\t\t\t*-------------------------------------*" <<endl;
+        cout << "\t\t\t\t\tWithdrawal successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+        cout << "\t\t\t\t\t*-------------------------------------*\n\n" <<endl;
     }
     cout << "Press any key to continue..." << endl;
     _getch();
@@ -221,11 +236,16 @@ void Transaction::transaction_withdraw() {
 
 void Transaction::transaction_deposit() {
     double amount;
-    cout << "Enter amount to deposit: ";
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tEnter amount to deposit: ";
     cin >> amount;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
 
     account.balance += amount;
-    cout << "Deposit successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*----------------------------------*" <<endl;
+    cout << "\t\t\t\t\tDeposit successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*----------------------------------*\n\n" <<endl;
+
     cout << "Press any key to continue..." << endl;
     _getch();
 }
@@ -234,24 +254,35 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
     string targetAccNumber;
     double amount;
 
-    cout << "Enter target account number: ";
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tEnter target account number: ";
     cin >> targetAccNumber;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
 
     if (!validateAccount(targetAccNumber)) {
-        cout << "Target account not found!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tTarget account not found!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
+
         cout << "Press any key to continue..." << endl;
         _getch();
         return;
     }
 
-    cout << "Enter amount to transfer: ";
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tEnter amount to transfer: ";
     cin >> amount;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
 
     if (amount > account.balance) {
-        cout << "Insufficient balance!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*" <<endl;
+        cout << "\t\t\t\t\tInsufficient balance!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
         account.balance -= amount;
-        cout << "Transfer successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+        cout << "\t\t\t\t\t*-----------------------------------*" <<endl;
+        cout << "\t\t\t\t\tTransfer successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+        cout << "\t\t\t\t\t*-----------------------------------*\n\n" <<endl;
     }
     cout << "Press any key to continue..." << endl;
     _getch();
@@ -261,7 +292,8 @@ void Transaction::changePin() {
     string newPin;
     char ch; // Variable to store each character entered
 
-    cout << "Enter new 4-digit PIN Code: ";
+    cout << "\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tEnter new 4-digit PIN Code: ";
 
     while (newPin.length() < 4) {
         ch = _getch(); // Get a character without echoing it
@@ -278,7 +310,10 @@ void Transaction::changePin() {
     cout << endl; // Move to the next line after entering the PIN
 
     account.pinCode = encryptPin(newPin); // Update the encrypted pinCode
-    cout << "PIN changed successfully!" << endl;
+    cout << "\n\n\t\t\t\t\t*------------------------------*" <<endl;
+    cout << "\t\t\t\t\tPIN changed successfully!" << endl;
+    cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
+
     cout << "Press any key to continue..." << endl;
     _getch();
 }
@@ -287,16 +322,22 @@ void Transaction::transaction_menu(MyATM &atm) {
     int choice;
     do {
         system("cls");
-        cout << "========== TRANSACTION MENU ==========" << endl;
-        cout << "1. View Balance" << endl;
-        cout << "2. Withdraw" << endl;
-        cout << "3. Deposit" << endl;
-        cout << "4. Fund Transfer" << endl;
-        cout << "5. Change PIN" << endl;
-        cout << "0. Exit" << endl;
-        cout << "Enter your choice: ";
-        cin >> choice;
+       cout << "\t ________                                        __________                 ______  ___                   " << endl;
+    cout << "\t ___  __/____________ ____________________ ________  /___(_)____________    ___   |/  /_______________  __" << endl;
+    cout << "\t __  /  __  ___/  __ `/_  __ \\_  ___/  __ `/  ___/  __/_  /_  __ \\_  __ \\   __  /|_/ /_  _ \\_  __ \\  / / /" << endl;
+    cout << "\t _  /   _  /   / /_/ /_  / / /(__  )/ /_/ // /__ / /_ _  / / /_/ /  / / /   _  /  / / /  __/  / / / /_/ / " << endl;
+    cout << "\t _/    /_/    \\__,_/ /_/ /_//____/ \\__,_/ \\___/ \\__/ /_/  \\____//_/ /_/    /_/  /_/  \\___//_/ /_/\\__,_/  \n\n" << endl;
 
+        cout << "\t\t\t\t*-----------------------*     *-----------------------*" << endl;
+        cout << "\t\t\t\t|   1. View Balance     |     |   4. Fund Transfer    |" << endl;
+        cout << "\t\t\t\t|   2. Withdraw         |     |   5. Change Pin       |" << endl;
+        cout << "\t\t\t\t|   3. Deposit          |     |   0. Exit             |" << endl;
+        cout << "\t\t\t\t*-----------------------*     *-----------------------*\n\n" << endl;
+
+        cout << "*--------------------------------*" <<endl;
+        cout << "\tEnter your choice: ";
+        cin >> choice;
+        cout << "*--------------------------------*\n\n" <<endl;
         switch (choice) {
         case 1:
             displayBalance();
@@ -318,7 +359,6 @@ void Transaction::transaction_menu(MyATM &atm) {
 }
 
 int main() {
-    system("color 0A");
     srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
     MyATM atm;
     Registration reg;
@@ -327,41 +367,43 @@ int main() {
     int choice;
     do {
         system("cls");
-         cout << "\t\t __    __  ________  _______   ______  ________  ______    ______   ________        _______    ______   __    __  __       " << endl;
-    cout << "\t\t/  |  /  |/        |/       \\ /      |/        |/      \\  /      \\ /        |      /       \\  /      \\ /  \\  /  |/  |      " << endl;
-    cout << "\t\t$$ |  $$ |$$$$$$$$/ $$$$$$$  |$$$$$$/ $$$$$$$$//$$$$$$  |/$$$$$$  |$$$$$$$$/       $$$$$$$  |/$$$$$$  |$$  \\ $$ |$$ |   __ " << endl;
-    cout << "\t\t$$ |__$$ |$$ |__    $$ |__$$ |  $$ |     $$ |  $$ |__$$ |$$ | _$$/ $$ |__          $$ |__$$ |$$ |__$$ |$$$  \\$$ |$$ |  /  |" << endl;
-    cout << "\t\t$$    $$ |$$    |   $$    $$<   $$ |     $$ |  $$    $$ |$$ |/    |$$    |         $$    $$< $$    $$ |$$$$  $$ |$$ |_/$$/ " << endl;
-    cout << "\t\t$$$$$$$$ |$$$$$/    $$$$$$$  |  $$ |     $$ |  $$$$$$$$ |$$ |$$$$ |$$$$$/          $$$$$$$  |$$$$$$$$ |$$ $$ $$ |$$   $$<  " << endl;
-    cout << "\t\t$$ |  $$ |$$ |_____ $$ |  $$ | _$$ |_    $$ |  $$ |  $$ |$$ \\__$$ |$$ |_____       $$ |__$$ |$$ |  $$ |$$ |$$$$ |$$$$$$  \\ " << endl;
-    cout << "\t\t$$ |  $$ |$$       |$$ |  $$ |/ $$   |   $$ |  $$ |  $$ |$$    $$/ $$       |      $$    $$/ $$ |  $$ |$$ | $$$ |$$ | $$  |" << endl;
-    cout << "\t\t$$/   $$/ $$$$$$$$/ $$/   $$/ $$$$$$/    $$/   $$/   $$/  $$$$$$/  $$$$$$$$/       $$$$$$$/  $$/   $$/ $$/   $$/ $$/   $$/ \n\n\n" << endl;
-
-        cout << "\t\t\t\t\t-- .--------------------------------------------------------------------." << endl;
-    cout << "\t\t\t\t\t-- | ____            ______                __         __                |" << endl;
-    cout << "\t\t\t\t\t-- ||_   |          |   __ \\ .-----..-----.|__|.-----.|  |_ .-----..----|" << endl;
-    cout << "\t\t\t\t\t-- | _|  |_  __     |      <|  -__||  _  ||  ||__ --||   _||  -__||   _||" << endl;
-    cout << "\t\t\t\t\t-- ||______||__|    |___|__||_____||___  ||__||_____||____||_____||__|  |" << endl;
-    cout << "\t\t\t\t\t-- |                               |_____|                              |" << endl;
-    cout << "\t\t\t\t\t-- '--------------------------------------------------------------------'\n\n" << endl;
+           cout << "\t\t\t\t\t$$$$$$$$\\  $$\\   $$\\ $$$$$$$$\\ " << endl;
+    cout << "\t\t\t\t\t$$  __$$\\ $$$\\  $$ |$$  _____| " << endl;
+    cout << "\t\t\t\t\t$$ |  $$ |$$$$\\ $$ |$$ |       " << endl;
+    cout << "\t\t\t\t\t$$$$$$$$ |$$ $$\\$$ |$$$$$\\     " << endl;
+    cout << "\t\t\t\t\t$$  __$$\\ $$ \\$$$$ |$$  __|    " << endl;
+    cout << "\t\t\t\t\t$$ |  $$ |$$ |\\$$$ |$$ |       " << endl;
+    cout << "\t\t\t\t\t$$$$$$$$ |$$ | \\$$ |$$ |       " << endl;
+    cout << "\t\t\t\t\t\\_______/ \\__|  \\__|\\__|       \n\n" << endl;
 
 
-        cout << "\t\t\t\t\t-- .-----------------------------------------------------------------------------------------." << endl;
-    cout << "\t\t\t\t\t-- | ______          _______                                          __    __               |" << endl;
-    cout << "\t\t\t\t\t-- ||__    |        |_     _|.----..---.-..-----..-----..---.-..----.|  |_ |__|.-----..-----.|" << endl;
-    cout << "\t\t\t\t\t-- ||    __| __       |   |  |   _||  _  ||     ||__ --||  _  ||  __||   _||  ||  _  ||     ||" << endl;
-    cout << "\t\t\t\t\t-- ||______||__|      |___|  |__|  |___._||__|__||_____||___._||____||____||__||_____||__|__||" << endl;
-    cout << "\t\t\t\t\t-- '-----------------------------------------------------------------------------------------|\n\n" << endl;
+         cout << "\t\t\t.----------------------------------------------------------------." << endl;
+    cout << "\t\t\t| ____           ______               __         __               |" << endl;
+    cout << "\t\t\t||_   |         |   __ \\ .-----.-----.|__|.-----.|  |_.-----.----.|" << endl;
+    cout << "\t\t\t| _|  |_ __     |      < |  -__|  _  ||  ||__ --||   _|  -__|   _||" << endl;
+    cout << "\t\t\t||______|__|    |___|__||_____|___  ||__||_____||____|_____|__|   |" << endl;
+    cout << "\t\t\t|                             |_____|                             |" << endl;
+    cout << "\t\t\t'-----------------------------------------------------------------'\n" << endl;
 
-         cout << "\t\t\t\t\t-- .------------------------------------------." << endl;
-    cout << "\t\t\t\t\t-- | ______          _______         __  __   |" << endl;
-    cout << "\t\t\t\t\t-- ||      |        |    ___|.--.--.|__||  |_ |" << endl;
-    cout << "\t\t\t\t\t-- ||  --  | __     |    ___||_   _||  ||   _||" << endl;
-    cout << "\t\t\t\t\t-- ||______||__|    |_______||__.__||__||____||" << endl;
-    cout << "\t\t\t\t\t-- '------------------------------------------'\n\n" << endl;
 
-        cout << "Enter your choice: ";
+         cout << "\t\t\t.---------------------------------------------------------------------------------." << endl;
+    cout << "\t\t\t| ______         _______                                     __   __              |" << endl;
+    cout << "\t\t\t||__    |       |_     _|.----.---.-.-----.-----.---.-.----.|  |_|__|.-----.-----.|" << endl;
+    cout << "\t\t\t||    __|__       |   |  |   _|  _  |     |__ --|  _  |  __||   _|  ||  _  |     ||" << endl;
+    cout << "\t\t\t||______|__|      |___|  |__| |___._|__|__|_____|___._|____||____|__||_____|__|__||" << endl;
+    cout << "\t\t\t'---------------------------------------------------------------------------------'\n" << endl;
+
+         cout << "\t\t\t.----------------------------------------." << endl;
+    cout << "\t\t\t| ______         _______         __ __   |" << endl;
+    cout << "\t\t\t||      |       |    ___|.--.--.|__|  |_ |" << endl;
+    cout << "\t\t\t||  --  |__     |    ___||_   _||  |   _||" << endl;
+    cout << "\t\t\t||______|__|    |_______||__.__||__|____||" << endl;
+    cout << "\t\t\t'----------------------------------------'\n\n" << endl;
+
+        cout << "*---------------------------------*" <<endl;
+        cout << "\tEnter your choice: ";
         cin >> choice;
+        cout << "*---------------------------------*\n\n" <<endl;
 
         switch (choice) {
         case 1:
@@ -369,8 +411,10 @@ int main() {
             break;
         case 2: {
             string inputAccNumber;
-            cout << "Enter account number: ";
+            cout << "*---------------------------------*" <<endl;
+            cout << "\tEnter account number: ";
             cin >> inputAccNumber;
+            cout << "*---------------------------------*\n\n" <<endl;
 
             if (trans.validateAccount(inputAccNumber)) {
                 trans.loadAccount(inputAccNumber);
