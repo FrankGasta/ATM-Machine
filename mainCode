@@ -409,7 +409,9 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
         return;
     }
 
+    cout << "\t\t\t\t\t*------------------------------------*" << endl;
     cout << "\t\t\t\t\tTransfer successful! New balance: PHP " << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*------------------------------------*" << endl;
     cout << "Press any key to continue..." << endl;
     _getch();
 }
