@@ -155,7 +155,7 @@ void Registration::Register(MyATM &atm) {
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
         cout << "\t\t\t\t\t*------------------------------*" <<endl;
-        cout << "\t\t\t\t\tError opening file for writing!" << endl;
+        cout << "\t\t\t\t\tError...No Card Found..." << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     }
     cout << "\t\t\t\t\t*------------------------------*" <<endl;
@@ -200,7 +200,7 @@ void Transaction::loadAccount(const string &inputAccNumber) {
         infile.close();
     } else {
         cout << "\t\t\t\t\t*------------------------------*" <<endl;
-        cout << "\t\t\t\t\tUnable to open file" << endl;
+        cout << "\t\t\t\t\tUnable to open Account" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     }
 }
