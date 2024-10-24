@@ -543,35 +543,6 @@ void Transaction::transaction_menu(MyATM &atm) {
     } while (choice != 0);
 }
 
-void Transaction::saveAccountToFile() {
-    ifstream inputFile("D:\\bob\\Bob.txt");
-    ofstream tempFile("D:\\Bob\\D:\\Bob\\Bob.txt");
-    string line;
-
-    while (getline(inputFile, line)) {
-        stringstream ss(line);
-        string accNum;
-        getline(ss, accNum, ',');
-
-        if (accNum == account.accNumber) {
-            tempFile << account.accNumber << ","
-                     << account.accName << ","
-                     << account.birthDay << ","
-                     << account.contactNumber << ","
-                     << account.balance << ","
-                     << account.pinCode << "\n";
-        } else {
-            tempFile << line << "\n";
-        }
-    }
-
-    inputFile.close();
-    tempFile.close();
-
-    remove("D:\\bob\\Bob.txt");
-    rename("D:\\Bob\\Bob.txt", "D:\\bob\\Bob.txt");
-}
-
 int main() {
     system("color 8F");
      ifstream SaveFile("D:\\Bob\\Bob.txt"); // Check if the file exists
