@@ -97,6 +97,7 @@ void getBirthdayInput(string &birthday) {
 
 void Registration::Register(MyATM &atm) {
     Account account;
+    system("cls");
       cout << "\t\t\t __________              .__          __                " << endl;
     cout << "\t\t\t\\______   \\ ____   ____ |__| _______/  |_  ___________ " << endl;
     cout << "\t\t\t |       _// __ \\ / ___\\|  |/  ___/\\   __\\/ __ \\_  __ \\" << endl;
