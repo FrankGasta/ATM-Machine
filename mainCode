@@ -42,7 +42,7 @@ public:
 };
 
 bool MyATM::checkCard(const string &cardNumber) {
-    ifstream SaveFile("xyz.txt");
+    ifstream SaveFile("D:\\bob\\Bob.txt");
     string line;
     while (getline(SaveFile, line)) {
         if (line == cardNumber) {
@@ -147,7 +147,7 @@ void Registration::Register(MyATM &atm) {
     // Set balance only when creating a new account
     account.balance = 5000.0; // Initialize balance here
 
-    ofstream atmFile("xyz.txt", ios::app);
+    ofstream atmFile("D:\\bob\\Bob.txt", ios::app);
     if (atmFile.is_open()) {
         atmFile << account.accNumber << ","
                 << account.accName << ","
@@ -171,7 +171,7 @@ void Registration::Register(MyATM &atm) {
 }
 
 bool Transaction::validateAccount(const string &inputAccNumber) {
-    ifstream SaveFile("xyz.txt");
+    ifstream SaveFile("D:\\bob\\Bob.txt");
     string line;
     bool accountFound = false;
 
@@ -188,7 +188,7 @@ bool Transaction::validateAccount(const string &inputAccNumber) {
 }
 
 void Transaction::loadAccount(const string &inputAccNumber) {
-    ifstream SaveFile("xyz.txt");
+    ifstream SaveFile("D:\\bob\\Bob.txt");
     if (SaveFile.is_open()) {
         string line;
         while (getline(SaveFile, line)) {
@@ -245,8 +245,8 @@ void Transaction::transaction_withdraw() {
     cout << "\t\t\t\t\t*-----------------------------------*\n\n" << endl;
 
     // Load the current accounts
-    ifstream inputFile("xyz.txt");
-    ofstream tempFile("Temp.txt");
+    ifstream inputFile("D:\\bob\\Bob.txt");
+    ofstream tempFile("D:\\Bob\\Bob.txt");
 
     if (!inputFile.is_open()) {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
@@ -299,14 +299,14 @@ void Transaction::transaction_withdraw() {
     }
 
     // Replace the original file with the updated file
-    if (remove("xyz.txt") != 0) {
+    if (remove("D:\\bob\\Bob.txt") != 0) {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
         cout << "\t\t\t\t\tError deleting original file!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
         return;
     }
 
-    if (rename("Temp.txt", "xyz.txt") != 0) {
+    if (rename("D:\\Bob\\Bob.txt", "D:\\bob\\Bob.txt") != 0) {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
         cout << "\t\t\t\t\tError renaming temporary file!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
@@ -373,8 +373,8 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
 
     // Load the target account and update its balance
     Account targetAccount;
-    ifstream inputFile("xyz.txt");
-    ofstream tempFile("Temp.txt");
+    ifstream inputFile("D:\\bob\\Bob.txt");
+    ofstream tempFile("D:\\Bob\\Bob.txt");
 
     if (!inputFile.is_open() || !tempFile.is_open()) {
         cout << "\t\t\t\t\tError opening files!" << endl;
@@ -415,8 +415,8 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
     tempFile.close();
 
     // Replace the original file with the updated file
-    remove("xyz.txt");
-    rename("Temp.txt", "xyz.txt");
+    remove("D:\\bob\\Bob.txt");
+    rename("D:\\Bob\\Bob.txt", "D:\\bob\\Bob.txt");
 
     cout << "\t\t\t\t\tTransfer successful! New balance: PHP " << fixed << setprecision(2) << account.balance << endl;
     cout << "Press any key to continue..." << endl;
@@ -495,8 +495,8 @@ void Transaction::transaction_menu(MyATM &atm) {
 }
 
 void Transaction::saveAccountToFile() {
-    ifstream inputFile("xyz.txt");
-    ofstream tempFile("D:\\Bob\\Temp.txt");
+    ifstream inputFile("D:\\bob\\Bob.txt");
+    ofstream tempFile("D:\\Bob\\D:\\Bob\\Bob.txt");
     string line;
 
     while (getline(inputFile, line)) {
@@ -519,13 +519,13 @@ void Transaction::saveAccountToFile() {
     inputFile.close();
     tempFile.close();
 
-    remove("xyz.txt");
-    rename("Temp.txt", "xyz.txt");
+    remove("D:\\bob\\Bob.txt");
+    rename("D:\\Bob\\Bob.txt", "D:\\bob\\Bob.txt");
 }
 
 int main() {
     system("color 8F");
-    ifstream SaveFile("D:\\Bob\\Bob.txt"); // Check if the file exists
+     ifstream SaveFile("D:\\Bob\\Bob.txt"); // Check if the file exists
     if (!SaveFile.is_open()) {
         cout << "\n\n\t\t+==================================================================================+\n";
     cout << "\t\t| ____  _                       ___                     _      ____              _ |\n";
