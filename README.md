@@ -5,7 +5,7 @@
   <li>Frank Gasta</li>
   <li>John Russel Gallanosa</li>
   <li><b>Jeofrey Delos Reyes</b></li>
-  <li><b>Marlon Peralta (With Marlon Using Frank's Laptop because he doesnt has one)</b></li>
+  <li><b>Marlon Peralta(With Marlon Using Frank's Laptop because he doesnt has one)</b></li>
 </ul>
 
 <h2 id="project-overview" align="center">Project Overview</h2>
@@ -23,26 +23,22 @@
   <li>PIN change</li>
 </ul>
 
-<h2 id="system-requirements">System Requirements</h2>
+<h2 id="KIST Information">LIST Information</h2>
 
 <ul>
-  <li>Operating system: [operating system]</li>
-  <li>Hardware requirements: [processor, memory, storage]</li>
-  <li>Software dependencies: [libraries, frameworks]</li>
+<li>Account Number (5 digits)</li>
+<li>Account Name</li>
+<li>Birthday</li>
+<li>Contact number</li>
+<li>Initial Deposit (Min. 5000)</li>
+<li>Pin code</li>
+
 </ul>
 
-<h2 id="installation-and-setup">Installation and Setup</h2>
-
-<ol>
-  <li>Download and install dependencies: [dependencies]</li>
-  <li>Configure the system: [configuration instructions]</li>
-  <li>Run the application: [run instructions]</li>
-</ol>
-
-<h2 id="usage">Usage</h2>
+<h2 id="important">Important</h2>
 
 <ul>
-  <li>Logging in and out: [login instructions]</li>
-  <li>Performing transactions: [transaction instructions]</li>
-  <li>Viewing account information: [account information instructions]</li>
+<li>PIN CODE: MAX of 6 digits/ 4 digits need to press ENTER key</li>
+<li>Check the pin.code file in card if not present the program will ask to “Please insert card.</li>
 </ul>
+
