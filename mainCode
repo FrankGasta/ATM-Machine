@@ -141,21 +141,21 @@ void Registration::Register(MyATM &atm) {
     account.pinCode = encryptPin(pin); // Encrypt the PIN code
 
     // Save account details to a file
-    ofstream outfile("D:\\Bob\\Bob.txt", ios::app);
-    if (outfile.is_open()) {
-        outfile << account.accNumber << ","
+    ofstream atmFile("D:\\Bob\\Bob.txt", ios::app);
+    if (atmFile.is_open()) {
+        atmFile << account.accNumber << ","
                 << account.accName << ","
                 << account.birthDay << ","
                 << account.contactNumber << ","
                 << account.balance << ","
                 << account.pinCode << "\n";
-        outfile.close();
+        atmFile.close();
         cout << "\t\t\t\t\t*------------------------------*" <<endl;
         cout << "\t\t\t\t\tAccount successfully registered!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
         cout << "\t\t\t\t\t*------------------------------*" <<endl;
-        cout << "\t\t\t\t\tError...No Card Found..." << endl;
+        cout << "\t\t\t\t\tError...No Card Found" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     }
     cout << "\t\t\t\t\t*------------------------------*" <<endl;
@@ -165,11 +165,11 @@ void Registration::Register(MyATM &atm) {
 }
 
 bool Transaction::validateAccount(const string &inputAccNumber) {
-    ifstream infile("D:\\Bob\\Bob.txt");
+    ifstream SaveFile("D:\\Bob\\Bob.txt");
     string line;
     bool accountFound = false;
 
-    while (getline(infile, line)) {
+    while (getline(SaveFile, line)) {
         stringstream ss(line);
         getline(ss, account.accNumber, ','); // Read the account number
         if (account.accNumber == inputAccNumber) {
@@ -177,15 +177,15 @@ bool Transaction::validateAccount(const string &inputAccNumber) {
             break;
         }
     }
-    infile.close();
+    SaveFile.close();
     return accountFound;
 }
 
 void Transaction::loadAccount(const string &inputAccNumber) {
-    ifstream infile("D:\\Bob\\Bob.txt");
-    if (infile.is_open()) {
+    ifstream SaveFile("D:\\Bob\\Bob.txt");
+    if (SaveFile.is_open()) {
         string line;
-        while (getline(infile, line)) {
+        while (getline(SaveFile, line)) {
             stringstream ss(line);
             getline(ss, account.accNumber, ',');
             if (account.accNumber == inputAccNumber) {
@@ -197,7 +197,7 @@ void Transaction::loadAccount(const string &inputAccNumber) {
                 break;
             }
         }
-        infile.close();
+        SaveFile.close();
     } else {
         cout << "\t\t\t\t\t*------------------------------*" <<endl;
         cout << "\t\t\t\t\tUnable to open Account" << endl;
