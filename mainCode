@@ -291,10 +291,54 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
         cout << "\t\t\t\t\tInsufficient balance!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" <<endl;
     } else {
+        // Deduct the amount from the current account
         account.balance -= amount;
         cout << "\t\t\t\t\t*-----------------------------------*" <<endl;
         cout << "\t\t\t\t\tTransfer successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
         cout << "\t\t\t\t\t*-----------------------------------*\n\n" <<endl;
+
+        // Load the target account
+        Account targetAccount;
+        ifstream inputFile("D:\\Bob\\Bob.txt");
+        ofstream tempFile("D:\\Bob\\Temp.txt");
+        string line;
+
+        while (getline(inputFile, line)) {
+            stringstream ss(line);
+            string accNum;
+            getline(ss, accNum, ',');
+
+            if (accNum == targetAccNumber) {
+                // Read the target account details
+                targetAccount.accNumber = accNum;
+                getline(ss, targetAccount.accName, ',');
+                getline(ss, targetAccount.birthDay, ',');
+                getline(ss, targetAccount.contactNumber, ',');
+                ss >> targetAccount.balance;
+                getline(ss, targetAccount.pinCode, ',');
+
+                // Update the balance of the target account
+                targetAccount.balance += amount;
+
+                // Write updated target account back to the temp file
+                tempFile << targetAccount.accNumber << ","
+                         << targetAccount.accName << ","
+                         << targetAccount.birthDay << ","
+                         << targetAccount.contactNumber << ","
+                         << targetAccount.balance << ","
+                         << targetAccount.pinCode << "\n";
+            } else {
+                // Write all other accounts back to the temp file unchanged
+                tempFile << line << "\n";
+            }
+        }
+
+        inputFile.close();
+        tempFile.close();
+
+        // Replace the original file with the updated file
+        remove("D:\\Bob\\Bob.txt");
+        rename("D:\\Bob\\Temp.txt", "D:\\Bob\\Bob.txt");
     }
     cout << "Press any key to continue..." << endl;
     _getch();
