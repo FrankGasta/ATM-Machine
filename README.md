@@ -5,7 +5,7 @@
   <li>Frank Gasta</li>
   <li>John Russel Gallanosa</li>
   <li><b>Jeofrey Delos Reyes</b></li>
-  <li><b>Marlon Peralta(With Marlon Using Frank's Laptop because he doesnt has one)</b></li>
+  <li><b>Marlon Peralta (With Marlon Using Frank's Laptop because he doesnt has one)</b></li>
 </ul>
 
 <h2 id="project-overview" align="center">Project Overview</h2>
