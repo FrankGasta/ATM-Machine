@@ -324,14 +324,63 @@ void Transaction::transaction_deposit() {
     cin >> amount;
     cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
 
+    // Update the account balance
     account.balance += amount;
     cout << "\t\t\t\t\t*----------------------------------*" << endl;
-    cout << "\t\t\t\t\tDeposit successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\tDeposit successful! New balance: PHP " << fixed << setprecision(2) << account.balance << endl;
     cout << "\t\t\t\t\t*----------------------------------*\n\n" << endl;
 
     saveAccountToFile();
     cout << "Press any key to continue..." << endl;
     _getch();
+}
+
+void Transaction::saveAccountToFile() {
+    // Create a temporary file to write updated accounts
+    ofstream tempFile("D:\\bob\\Temp.txt");
+    if (!tempFile.is_open()) {
+        cout << "Error opening temporary file for writing!" << endl;
+        return;
+    }
+
+    // Open the original file for reading
+    ifstream inputFile("D:\\bob\\Bob.txt");
+    if (!inputFile.is_open()) {
+        cout << "Error opening original account file!" << endl;
+        tempFile.close();
+        return;
+    }
+
+    string line;
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string accNum;
+
+        // Get the account number from the line
+        getline(ss, accNum, ',');
+
+        // Write updated balance for the current account
+        if (accNum == account.accNumber) {
+            // Write the updated account info with the new balance
+            tempFile << accNum << ","
+                      << account.accName << ","
+                      << account.birthDay << ","
+                      << account.contactNumber << ","
+                      << fixed << setprecision(2) << account.balance << ","
+                      << account.pinCode << "\n";
+        } else {
+            // Write other accounts unchanged
+            tempFile << line << "\n";
+        }
+    }
+
+    // Clean up: close files
+    inputFile.close();
+    tempFile.close();
+
+    // Replace the original file with the updated temporary file
+    remove("D:\\bob\\Bob.txt"); // Remove the old file
+    rename("D:\\bob\\Temp.txt", "D:\\bob\\Bob.txt"); // Rename temp file to original file name
 }
 
 void Transaction::transaction_fundTransfer(MyATM &atm) {
