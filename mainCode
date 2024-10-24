@@ -17,9 +17,7 @@ public:
     string birthDay;
     string contactNumber;
     string pinCode;
-    double balance;
-
-    Account() : balance(5000.0) {}
+    double balance; // Remove default initialization here
 };
 
 string encryptPin(const string &pin) {
@@ -44,7 +42,7 @@ public:
 };
 
 bool MyATM::checkCard(const string &cardNumber) {
-    ifstream SaveFile("D:\\Bob\\Bob.txt");
+    ifstream SaveFile("xyz.txt");
     string line;
     while (getline(SaveFile, line)) {
         if (line == cardNumber) {
@@ -146,7 +144,10 @@ void Registration::Register(MyATM &atm) {
 
     account.pinCode = encryptPin(pin);
 
-    ofstream atmFile("D:\\Bob\\Bob.txt ", ios::app);
+    // Set balance only when creating a new account
+    account.balance = 5000.0; // Initialize balance here
+
+    ofstream atmFile("xyz.txt", ios::app);
     if (atmFile.is_open()) {
         atmFile << account.accNumber << ","
                 << account.accName << ","
@@ -170,7 +171,7 @@ void Registration::Register(MyATM &atm) {
 }
 
 bool Transaction::validateAccount(const string &inputAccNumber) {
-    ifstream SaveFile("D:\\Bob\\Bob.txt");
+    ifstream SaveFile("xyz.txt");
     string line;
     bool accountFound = false;
 
@@ -187,7 +188,7 @@ bool Transaction::validateAccount(const string &inputAccNumber) {
 }
 
 void Transaction::loadAccount(const string &inputAccNumber) {
-    ifstream SaveFile("D:\\Bob\\Bob.txt");
+    ifstream SaveFile("xyz.txt");
     if (SaveFile.is_open()) {
         string line;
         while (getline(SaveFile, line)) {
@@ -221,6 +222,7 @@ void Transaction::displayBalance() {
 
 void Transaction::transaction_withdraw() {
     double amount;
+
     cout << "\t\t\t\t\t*------------------------------*" << endl;
     cout << "\t\t\t\t\tEnter amount to withdraw: ";
     cin >> amount;
@@ -230,18 +232,91 @@ void Transaction::transaction_withdraw() {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
         cout << "\t\t\t\t\tInsufficient balance!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
-    } else {
-        account.balance -= amount;
-        cout << "\t\t\t\t\t*-------------------------------------*" << endl;
-        cout << "\t\t\t\t\tWithdrawal successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
-        cout << "\t\t\t\t\t*-------------------------------------*\n\n" << endl;
-
-        saveAccountToFile();
+        cout << "Press any key to continue..." << endl;
+        cin.ignore();
+        cin.get();
+        return;
     }
-    cout << "Press any key to continue..." << endl;
-    _getch();
-}
 
+    // Deduct the amount from the current account
+    account.balance -= amount;
+    cout << "\t\t\t\t\t*-----------------------------------*" << endl;
+    cout << "\t\t\t\t\tWithdrawal successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
+    cout << "\t\t\t\t\t*-----------------------------------*\n\n" << endl;
+
+    // Load the current accounts
+    ifstream inputFile("xyz.txt");
+    ofstream tempFile("Temp.txt");
+
+    if (!inputFile.is_open()) {
+        cout << "\t\t\t\t\t*------------------------------*" << endl;
+        cout << "\t\t\t\t\tError opening account file!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
+        return;
+    }
+
+    if (!tempFile.is_open()) {
+        cout << "\t\t\t\t\t*------------------------------*" << endl;
+        cout << "\t\t\t\t\tError opening temporary file!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
+        inputFile.close(); // Close input file
+        return;
+    }
+
+    string line;
+    bool accountUpdated = false;
+
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string accNum;
+        getline(ss, accNum, ',');
+
+        // Update the current account's balance
+        if (accNum == account.accNumber) {
+            // Write the updated account back to the temp file
+            tempFile << accNum << ","
+                     << account.accName << ","
+                     << account.birthDay << ","
+                     << account.contactNumber << ","
+                     << account.balance << ","
+                     << account.pinCode << "\n";
+            accountUpdated = true;
+        } else {
+            // Write all other accounts back to the temp file unchanged
+            tempFile << line << "\n";
+        }
+    }
+
+    inputFile.close();
+    tempFile.close();
+
+    // If the account was not updated, inform the user
+    if (!accountUpdated) {
+        cout << "\t\t\t\t\t*------------------------------*" << endl;
+        cout << "\t\t\t\t\tAccount not found in the records!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
+        return;
+    }
+
+    // Replace the original file with the updated file
+    if (remove("xyz.txt") != 0) {
+        cout << "\t\t\t\t\t*------------------------------*" << endl;
+        cout << "\t\t\t\t\tError deleting original file!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
+        return;
+    }
+
+    if (rename("Temp.txt", "xyz.txt") != 0) {
+        cout << "\t\t\t\t\t*------------------------------*" << endl;
+        cout << "\t\t\t\t\tError renaming temporary file!" << endl;
+        cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
+        return;
+    }
+
+    cout << "Press any key to continue..." << endl;
+    cin.ignore();
+    cin.get();
+}
 void Transaction::transaction_deposit() {
     double amount;
     cout << "\t\t\t\t\t*------------------------------*" << endl;
@@ -268,6 +343,7 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
     cin >> targetAccNumber;
     cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
 
+    // Validate if the target account exists
     if (!validateAccount(targetAccNumber)) {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
         cout << "\t\t\t\t\tTarget account not found!" << endl;
@@ -282,65 +358,67 @@ void Transaction::transaction_fundTransfer(MyATM &atm) {
     cin >> amount;
     cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
 
+    // Check if the balance is sufficient for the transfer
     if (amount > account.balance) {
         cout << "\t\t\t\t\t*------------------------------*" << endl;
         cout << "\t\t\t\t\tInsufficient balance!" << endl;
         cout << "\t\t\t\t\t*------------------------------*\n\n" << endl;
-    } else {
-        account.balance -= amount;
+        cout << "Press any key to continue..." << endl;
+        _getch();
+        return;
+    }
 
-        Account targetAccount;
-        ifstream inputFile("D:\\Bob\\Bob.txt");
-        ofstream tempFile("D:\\Bob\\Temp.txt");
-        string line;
+    // Deduct the amount from the current account
+    account.balance -= amount;
 
-        while (getline(inputFile, line)) {
-            stringstream ss(line);
-            string accNum;
-            getline(ss, accNum, ',');
+    // Load the target account and update its balance
+    Account targetAccount;
+    ifstream inputFile("xyz.txt");
+    ofstream tempFile("Temp.txt");
 
-            if (accNum == targetAccNumber) {
-                targetAccount.accNumber = accNum;
-                getline(ss, targetAccount.accName, ',');
-                getline(ss, targetAccount.birthDay, ',');
-                getline(ss, targetAccount.contactNumber, ',');
-                ss >> targetAccount.balance;
-                getline(ss, targetAccount.pinCode, ',');
+    if (!inputFile.is_open() || !tempFile.is_open()) {
+        cout << "\t\t\t\t\tError opening files!" << endl;
+        return;
+    }
 
-                targetAccount.balance += amount;
-            } else {
-                tempFile << line << "\n";
-            }
+    string line;
+    bool targetAccountFound = false;
 
-            if (accNum == targetAccNumber) {
-                tempFile << targetAccount.accNumber << ","
-                         << targetAccount.accName << ","
-                         << targetAccount.birthDay << ","
-                         << targetAccount.contactNumber << ","
-                         << targetAccount.balance << ","
-                         << targetAccount.pinCode << "\n";
-            } else if (accNum == account.accNumber) {
-                tempFile << account.accNumber << ","
-                         << account.accName << ","
-                         << account.birthDay << ","
-                         << account.contactNumber << ","
-                         << account.balance << ","
-                         << account.pinCode << "\n";
-            } else {
-                tempFile << line << "\n";
-            }
+    // Process each line to update balances
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string accNum;
+        getline(ss, accNum, ',');
+
+        if (accNum == targetAccNumber) {
+            // Read the target account details
+            targetAccount.accNumber = accNum;
+            getline(ss, targetAccount.accName, ',');
+            getline(ss, targetAccount.birthDay, ',');
+            getline(ss, targetAccount.contactNumber, ',');
+            ss >> targetAccount.balance;
+            getline(ss, targetAccount.pinCode, ',');
+
+            // Update the balance of the target account
+            targetAccount.balance += amount;
+            targetAccountFound = true;
         }
 
-        inputFile.close();
-        tempFile.close();
-
-        remove("D:\\Bob\\Bob.txt");
-        rename("D:\\Bob\\Temp.txt", "D:\\Bob\\Bob.txt");
-
-        cout << "\t\t\t\t\t*-----------------------------------*" << endl;
-        cout << "\t\t\t\t\tTransfer successful! New balance: PHP" << fixed << setprecision(2) << account.balance << endl;
-        cout << "\t\t\t\t\t*-----------------------------------*\n\n" << endl;
+        // Write back to temp file
+        tempFile << accNum << "," << targetAccount.accName << ","
+                 << targetAccount.birthDay << "," << targetAccount.contactNumber << ","
+                 << fixed << setprecision(2) << (targetAccountFound && accNum == targetAccNumber ? targetAccount.balance : account.balance) << ","
+                 << targetAccount.pinCode << "\n";
     }
+
+    inputFile.close();
+    tempFile.close();
+
+    // Replace the original file with the updated file
+    remove("xyz.txt");
+    rename("Temp.txt", "xyz.txt");
+
+    cout << "\t\t\t\t\tTransfer successful! New balance: PHP " << fixed << setprecision(2) << account.balance << endl;
     cout << "Press any key to continue..." << endl;
     _getch();
 }
@@ -417,7 +495,7 @@ void Transaction::transaction_menu(MyATM &atm) {
 }
 
 void Transaction::saveAccountToFile() {
-    ifstream inputFile("D:\\Bob\\Bob.txt");
+    ifstream inputFile("xyz.txt");
     ofstream tempFile("D:\\Bob\\Temp.txt");
     string line;
 
@@ -441,25 +519,12 @@ void Transaction::saveAccountToFile() {
     inputFile.close();
     tempFile.close();
 
-    remove("D:\\Bob\\Bob.txt");
-    rename("D:\\Bob\\Temp.txt", "D:\\Bob\\Bob.txt");
+    remove("xyz.txt");
+    rename("Temp.txt", "xyz.txt");
 }
 
 int main() {
     system("color 8F");
-    ifstream SaveFile("D:\\Bob\\Bob.txt");
-    if (!SaveFile.is_open()) {
-        cout << "\n\n\t\t+==================================================================================+\n";
-        cout << "\t\t| ____  _                       ___                     _      ____              _ |\n";
-        cout << "\t\t||  _ \\| | ___  __ _ ___  ___  |_ _|_ __  ___  ___ _ __| |_   / ___|__ _ _ __ __| ||\n";
-        cout << "\t\t|| |_) | |/ _ \\/ _` / __|/ _ \\  | || '_ \\/ __|/ _ \\ '__| __| | |   / _` | '__/ _` ||\n";
-        cout << "\t\t||  __/| |  __/ (_| \\__ \\  __/  | || | | \\__ \\  __/ |  | |_  | |__| (_| | | | (_| ||\n";
-        cout << "\t\t||_|   |_|\\___|\\__,_|___/\\___| |___|_| |_|___/\\___|_|   \\__|  \\____\\__,_|_|  \\__,_||\n";
-        cout << "\t\t+==================================================================================+\n";
-
-        return 0;
-    }
-    SaveFile.close();
 
     srand(static_cast<unsigned int>(time(0)));
     MyATM atm;
